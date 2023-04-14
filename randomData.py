@@ -31,7 +31,6 @@ fake.add_provider(CatalogProvider)
 
 
 city_postal_dict = {}
-city_postal_dict = {'oz':'ounce', 'lb':'pound', 'g':'gram', 'kg':'kilogram', 'l':'liter'}
 
 def get_customer_name():
     name = fake.name().split()
