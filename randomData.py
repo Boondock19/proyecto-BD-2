@@ -2,6 +2,7 @@ from faker import Faker
 from faker.providers import BaseProvider
 import random
 import csv
+import string
 
 fake = Faker()
 
@@ -11,7 +12,20 @@ characterList = ['a','b','c','y','f','g','0','1','2','3','4','5','6','7','8','9'
 characterListEmployee = ['a','b','c','y','f','g','0','1','2','3','4','5','6','7','8','9']
 
 
+class UnitProvider(BaseProvider):
+    def unit_type(self):
+        unit_short = ['oz', 'lb', 'g', 'kg', 'l']
+        unit_long = ['ounce', 'pound', 'gram', 'kilogram', 'liter']
+        number = random.randint(0, 4)
+        return [unit_short[number], unit_long[number]]
+    
+
+
+fake.add_provider(UnitProvider)
+
+
 city_postal_dict = {}
+city_postal_dict = {'oz':'ounce', 'lb':'pound', 'g':'gram', 'kg':'kilogram', 'l':'liter'}
 
 def get_customer_name():
     name = fake.name().split()
@@ -80,15 +94,20 @@ def get_username():
 def get_date():
     return fake.date()
 
+def get_confirmation_code():
+    code_length = 8
+    letters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(letters) for i in range(code_length))
 
 
 def generate_groceryStore():
+    unitTypes = fake.unit_type()
     return [get_customer_name()[0], get_customer_name()[1],get_username(),get_user_password(),get_date(),get_delivery_address(),get_delivery_address(),get_user_email(),
-            get_user_phone(),get_employee_code(),get_employee_name()[0],get_employee_name()[1],get_city()[0],get_city()[1]]
+            get_user_phone(),get_confirmation_code(),get_employee_code(),get_employee_name()[0],get_employee_name()[1],get_city()[0],get_city()[1],unitTypes[1],unitTypes[0]]
 
 with open('groceryStoreData.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword','UserTimeInserted','CustomerAddress','CustomerDeliveryAddress',
-                     'CustomerEmail','CustomerPhone','EmployeeCode','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode'])
+                     'CustomerEmail','CustomerPhone','CustomerConfirmationCode','EmployeeCode','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode','UnitName','UnitShort'])
     for n in range(1, 100):
      writer.writerow(generate_groceryStore())
