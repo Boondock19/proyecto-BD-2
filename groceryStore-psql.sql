@@ -5,15 +5,16 @@ DROP TABLE IF EXISTS Email;
 DROP TABLE IF EXISTS Passwords;
 DROP TABLE IF EXISTS Username;
 DROP TABLE IF EXISTS Phone_number;
-DROP TABLE IF EXISTS City;
-
+DROP TABLE IF EXISTS Food;
+DROP TABLE IF EXISTS Brand_name;
+DROP TABLE IF EXISTS confirmation_code;
+DROP TABLE IF EXISTS Employee_code;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS City;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS Unit;
 
-CREATE DATABASE grocery;
-\connect "grocery"
+\connect GroceryStoreData-1510627-1210921;
 
 CREATE TEMP TABLE Temp_data (
     CustomerFirstName varchar(64),
@@ -41,6 +42,85 @@ CREATE TEMP TABLE Temp_data (
 
 \COPY Temp_data FROM 'groceryStoreData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
+
+DROP TABLE IF EXISTS First_name;
+
+CREATE TEMP TABLE IF NOT EXISTS First_name (
+    first_name varchar(64) NOT NULL
+);
+
+\COPY First_name FROM 'namesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Last_name (
+    
+    last_name varchar(64) NOT NULL
+);
+
+\COPY Last_name FROM 'lastNamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Email (
+    
+    email varchar(128) NOT NULL
+);
+
+\COPY Email FROM 'userEmailsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Passwords (
+    
+    password varchar(64) NOT NULL
+);
+
+\COPY Passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Username (
+    
+    username varchar(64) NOT NULL
+
+);
+
+\COPY Username FROM 'usernamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Phone_number (
+    
+    phone_number varchar(128) NOT NULL
+);
+
+\COPY Phone_number FROM 'userPhonesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Food (
+    
+    food varchar(64) NOT NULL
+);
+
+\COPY Food(food) FROM 'food.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Brand_name (
+    
+    brand_name varchar(64) NOT NULL
+);
+
+\COPY Brand_name FROM 'brandNames.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS confirmation_code (
+    
+    confirmation_code varchar(255) NOT NULL
+);
+
+\COPY confirmation_code FROM 'confirmationCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TEMP TABLE IF NOT EXISTS Employee_code (
+    employee_code varchar(32) NOT NULL
+);
+
+\COPY Employee_code FROM 'employeeCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+
+CREATE TEMP TABLA IF NOT EXISTS Temp_unit (
+    unit_name varchar(64) NOT NULL,
+    unit_short varchar(8) NOT NULL
+);
+
+\COPY Temp_unit FROM 'unitsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
 CREATE TABLE IF NOT EXISTS customer (
     id int  NOT NULL,
