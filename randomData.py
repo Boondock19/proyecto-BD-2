@@ -141,7 +141,7 @@ def generate_groceryStore():
             get_employee_name()[1],get_city()[0],get_city()[1],
             unitTypes[1],unitTypes[0],get_time_inserted(),get_time_confirmed()]
 
-with open('groceryStoreData.csv', 'w') as csvfile:
+with open('groceryStoreData.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword','UserTimeInserted','CustomerAddress','CustomerDeliveryAddress',
                      'CustomerEmail','CustomerPhone','CustomerConfirmationCode','EmployeeCode','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode',
