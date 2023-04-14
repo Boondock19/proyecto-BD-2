@@ -6,7 +6,9 @@ import csv
 fake = Faker()
 
 passwordLength = 12
+employeeCodeLength = 20
 characterList = ['a','b','c','y','f','g','0','1','2','3','4','5','6','7','8','9','!','@','#','*','?','<','>']
+characterListEmployee = ['a','b','c','y','f','g','0','1','2','3','4','5','6','7','8','9']
 
 
 city_postal_dict = {}
@@ -58,18 +60,35 @@ def get_user_password():
 
     return "".join(password)
 
+def get_employee_code():
+    code = []
+ 
+    for i in range(employeeCodeLength):
+   
+    # Picking a random character from our
+    # character list
+        randomchar = random.choice(characterListEmployee)
+     
+        # appending a random character to code
+        code.append(randomchar)
+
+    return "".join(code)
+
 def get_username():
     return fake.simple_profile().get('username')
 
 def get_date():
     return fake.date()
 
+
+
 def generate_groceryStore():
-    return [get_customer_name()[0], get_customer_name()[1],get_username(),get_user_password(),get_date(),get_delivery_address(),get_user_email(),get_user_phone(),get_employee_name()[0],get_employee_name()[1],get_city()[0],get_city()[1]]
+    return [get_customer_name()[0], get_customer_name()[1],get_username(),get_user_password(),get_date(),get_delivery_address(),get_delivery_address(),get_user_email(),
+            get_user_phone(),get_employee_code(),get_employee_name()[0],get_employee_name()[1],get_city()[0],get_city()[1]]
 
 with open('groceryStoreData.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword','UserTimeInserted','CustomerDeliveryAddress',
-                     'CustomerEmail','CustomerPhone','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode'])
+    writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword','UserTimeInserted','CustomerAddress','CustomerDeliveryAddress',
+                     'CustomerEmail','CustomerPhone','EmployeeCode','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode'])
     for n in range(1, 100):
      writer.writerow(generate_groceryStore())
