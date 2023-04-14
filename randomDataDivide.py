@@ -3,7 +3,7 @@ from faker.providers import BaseProvider
 import random
 import csv
 import string
-import datetime
+from datetime import datetime, timedelta
 
 fake = Faker()
 
@@ -58,6 +58,9 @@ def get_city():
 def get_delivery_address():
     return fake.street_address()
 
+def get_address():
+    return fake.street_address()
+
 def get_user_email():
     return fake.ascii_safe_email()
 
@@ -104,34 +107,11 @@ def get_confirmation_code():
     return ''.join(random.choice(letters) for i in range(code_length))
 
 def get_time_inserted():
-    return fake.date_time_between(start_date=datetime.datetime.now(), end_date=datetime.datetime.now() + datetime.timedelta(minutes=5))
-   
+   return fake.date_between(start_date='-5y', end_date='today')
+
 def get_time_confirmed():
-    time_confirmed = get_time_inserted() + datetime.timedelta(minutes=random.randint(0, 5))
-    return time_confirmed
-
-#  funciones para definir la tabla de order_status
-
-
-# funciones para definir la tabla de status_catalog 
-
-
-# funciones para definir la tabla de notes 
-
-
-# funciones para definir la tabla de box
-
-
-# funciones para definir la tabla de box_status
-
-
-# funciones para definir la tabla de delivery
-
-
-# funciones para definir la tabla de placed_order
-
-
-# funciones para definir la tabla de order_item
+    days_until_confirmed = random.randint(1, 14)
+    return get_time_inserted() + timedelta(days=days_until_confirmed)
 
 def generate_names():
     return [get_name()[0]]
@@ -151,8 +131,23 @@ def generate_user_email():
 def generate_user_phone():
     return [get_user_phone()]
 
+def generate_city():
+   return[get_city()[0],get_city()[1]]
+
+def generate_address():
+   return [get_address()]
+
+def generate_delivery_address():
+   return [get_delivery_address()]
+
 def generate_confirmation_code():
     return [get_confirmation_code()]
+
+def generate_time_inserted():
+   return [get_time_inserted()]
+
+def generate_time_confirmed():
+   return[get_time_confirmed()]
 
 def generate_employee_code():
     return [get_employee_code()]
@@ -187,6 +182,24 @@ with open('userEmailsData.csv', 'w',newline='') as csvfile:
     for n in range(1, 1000):
      writer.writerow(generate_user_email())
 
+with open('cityPostalCode.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['City','PostalCode'])
+    for n in range(1, 1000):
+     writer.writerow(generate_city())
+
+with open('address.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Address'])
+    for n in range(1, 500):
+     writer.writerow(generate_address())
+
+with open('deliveryAddress.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['deliveryAddress'])
+    for n in range(1, 500):
+     writer.writerow(generate_delivery_address())
+
 with open('userPhonesData.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Phone'])
@@ -198,6 +211,18 @@ with open('confirmationCodesData.csv', 'w', newline='') as csvfile:
     writer.writerow(['ConfirmationCode'])
     for n in range(1, 1000):
      writer.writerow(generate_confirmation_code())
+
+with open('timeInserted.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['timeInserted'])
+    for n in range(1, 1000):
+     writer.writerow(generate_time_inserted())
+
+with open('timeConfirmed.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['timeConfirmed'])
+    for n in range(1, 1000):
+     writer.writerow(generate_time_confirmed())
 
 with open('employeeCodesData.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
