@@ -136,15 +136,17 @@ def get_time_confirmed():
 
 def generate_groceryStore():
     unitTypes = fake.unit_type()
-    return [get_customer_name()[0], get_customer_name()[1],get_username(),get_user_password(),get_date(),get_delivery_address(),get_delivery_address(),get_user_email(),
+    return [get_customer_name()[0], get_customer_name()[1],get_username(),get_user_password(),
+            get_date(),get_delivery_address(),get_delivery_address(),get_user_email(),
             get_user_phone(),get_confirmation_code(),get_employee_code(),get_employee_name()[0],
             get_employee_name()[1],get_city()[0],get_city()[1],
             unitTypes[1],unitTypes[0],get_time_inserted(),get_time_confirmed()]
 
 with open('groceryStoreData.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword','UserTimeInserted','CustomerAddress','CustomerDeliveryAddress',
-                     'CustomerEmail','CustomerPhone','CustomerConfirmationCode','EmployeeCode','EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode',
-                     'UnitName','UnitShort','CatalogStatusName'])
-    for n in range(1, 100):
-     writer.writerow(generate_groceryStore())
+    writer.writerow(['CustomerFirstName','CustomerLastName','CustomerUserName','CustomerPassword',
+                     'UserTimeInserted','CustomerAddress','CustomerDeliveryAddress',
+                     'CustomerEmail','CustomerPhone','CustomerConfirmationCode','EmployeeCode',
+                     'EmployeeFirstName','EmployeeLastName','CityName','CityPostalCode',
+                     'UnitName','UnitShort','TimeInserted','TimeConfirmed'])
+    writer.writerow(generate_groceryStore())
