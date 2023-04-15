@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS Food;
 DROP TABLE IF EXISTS Brand_name;
 DROP TABLE IF EXISTS confirmation_code;
 DROP TABLE IF EXISTS Employee_code;
-DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS City;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS Unit;
@@ -281,7 +281,8 @@ CREATE TABLE IF NOT EXISTS Time_inserted (
 INSERT INTO Time_inserted (time_inserted)
 SELECT time_inserted FROM Temp_time_inserted;
 
-CREATE TEMP TABLE IF NOT EXISTS Temp_time_confirmed (
+CREATE TEMP TABLE IF NOT EXISTS Temp_
+e_confirmed (
     
     time_confirmed timestamp NOT NULL
 );
@@ -353,7 +354,7 @@ ON CONFLICT (city_name,postal_code) DO NOTHING;
 SELECT * FROM city;
 
 CREATE TABLE IF NOT EXISTS customer (
-    id SERIAL,
+    id INT NOT NULL,
     first_name varchar(64)  NOT NULL,
     last_name varchar(64)  NOT NULL,
     user_name varchar(64)  NOT NULL,

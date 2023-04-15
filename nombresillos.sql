@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS Username1;
 DROP SEQUENCE IF EXISTS user_seq;
 DROP TABLE IF EXISTS dominios;
 DROP TABLE IF EXISTS Email1;
+DROP TABLE IF EXISTS tiempito;
 
 CREATE TEMP TABLE nombresillos(
     ano int,
@@ -102,7 +103,29 @@ CREATE TABLE IF NOT EXISTS Email1 (
     email varchar(128) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS tiempito(
+    timecito timestamp,
+    timecitolater timestamp
+);
 
+
+CREATE OR REPLACE PROCEDURE random_city()
+AS $$
+DECLARE
+    selected_city RECORD;
+BEGIN
+    SELECT id,city,(random() * population::INTEGER) AS randomPopulation  INTO selected_city
+    FROM City_with_Population
+    ORDER BY randomPopulation
+    LIMIT 1;
+    
+    
+     RAISE NOTICE 'Selectd id: % , Selected city: %, population: %', selected_city.id ,selected_city.city, selected_city.randomPopulation;
+
+     RETURN;
+
+END
+$$ LANGUAGE plpgsql;
 
 CREATE FUNCTION crea_data_cliente(numero integer) 
 RETURNS integer AS $$
@@ -110,15 +133,23 @@ DECLARE
     i integer := 1;
     nombre text;
     aleatorio numeric := 0;
-    --aleatorio2 := numeric;
     aux boolean := FALSE;
     nombrecito varchar(35);
     apellidito varchar(35);
     per numeric;
     v_nextval INT;
-    user_name varchar(80);
+    user_name1 varchar(80);
     dom varchar(20);
     contrasena varchar(64);
+    phone_number_random varchar(128);
+    confirmation_code_random varchar(255);
+    address_random varchar(64);
+    delivery_address_random varchar(255);
+    time_in timestamp;
+    time_con timestamp;
+    selected_city RECORD;
+    idprueba int;
+
 BEGIN
     WHILE TRUE LOOP
         WHILE i <= numero LOOP
@@ -128,12 +159,25 @@ BEGIN
             SELECT NEXTVAL('user_seq') INTO v_nextval;
             SELECT dominio INTO dom FROM dominios ORDER BY RANDOM() LIMIT 1;
             SELECT password INTO contrasena FROM Passwords ORDER BY RANDOM() LIMIT 1;
+            SELECT phone_number INTO phone_number_random FROM Phone_number ORDER BY random() LIMIT 1;
+            SELECT confirmation_code INTO confirmation_code_random FROM Confirmation_code ORDER BY random() LIMIT 1;
+            SELECT address INTO address_random FROM Address ORDER BY random() LIMIT 1;
+            SELECT delivery_address INTO delivery_address_random FROM Delivery_address ORDER BY random() LIMIT 1;
+            SELECT time_inserted INTO time_in FROM Time_inserted ORDER BY RANDOM() LIMIT 1;
+            SELECT time_confirmed INTO time_con FROM Time_confirmed WHERE time_in <= time_con ORDER BY random() LIMIT 1;
+            SELECT id,city,(random() * population::INTEGER) AS randomPopulation  INTO selected_city FROM City_with_Population
+                    ORDER BY randomPopulation LIMIT 1;
+
             IF aleatorio < per THEN
-                user_name := CONCAT(nombrecito,'.',apellidito,'.',v_nextval);
-                INSERT INTO First_name1 (first_name1) VALUES (nombrecito);
-                INSERT INTO Apellido (lastname) VALUES (apellidito);
-                INSERT INTO Username1 (username) VALUES(user_name);
-                INSERT INTO Email1 (email) VALUES(CONCAT(user_name,dom));
+                user_name1 := CONCAT(nombrecito,'.',apellidito,'.',v_nextval);
+                INSERT INTO customer (id, first_name, last_name, user_name, password, time_inserted,
+                confirmation_code, time_confirmed, contact_email, contact_phone, city_id, 
+                address, delivery_city_id, delivery_address) 
+                VALUES (i, nombrecito, apellidito, user_name1, contrasena, 
+                time_in, confirmation_code_random, now(), CONCAT(user_name1,dom), phone_number_random, 
+                selected_city.id, address_random, selected_city.id, delivery_address_random)
+                ON CONFLICT ON CONSTRAINT customer_ak_1 DO NOTHING;
+
                 i := i + 1; 
             END IF;
 
@@ -150,7 +194,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT crea_data_cliente(25);
-SELECT * FROM First_name1;
-SELECT * FROM Apellido;
-SELECT * FROM Username1;
-SELECT * FROM Email1;
+-- SELECT * FROM First_name1;
+-- SELECT * FROM Apellido;
+-- SELECT * FROM Username1;
+-- SELECT * FROM Email1;
+-- SELECT * FROM tiempito;
+SELECT * FROM customer;
