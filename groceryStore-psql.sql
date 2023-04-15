@@ -100,9 +100,7 @@ CREATE TEMP TABLE IF NOT EXISTS Temp_passwords (
 \COPY Temp_passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
 CREATE TABLE IF NOT EXISTS Password (
-    id SERIAL,
-    password varchar(64) NOT NULL,
-    CONSTRAINT password_pk PRIMARY KEY (id)
+    password varchar(64) NOT NULL
 );
 
 INSERT INTO Password (password)

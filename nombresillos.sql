@@ -2,7 +2,11 @@
 
 DROP FUNCTION IF EXISTS crea_data_cliente;
 DROP TABLE IF EXISTS First_name1;
-DROP TABLE IF EXISTS fullname;
+DROP TABLE IF EXISTS Apellido;
+DROP TABLE IF EXISTS Username1;
+DROP SEQUENCE IF EXISTS user_seq;
+DROP TABLE IF EXISTS dominios;
+DROP TABLE IF EXISTS Email1;
 
 CREATE TEMP TABLE nombresillos(
     ano int,
@@ -74,7 +78,31 @@ CREATE TABLE IF NOT EXISTS First_name1 (
 CREATE TABLE IF NOT EXISTS Apellido (
     lastname varchar(64) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS Username1 (
+    username varchar(64) NOT NULL
+);
+
 -- Funcion
+CREATE SEQUENCE user_seq;
+
+CREATE TABLE IF NOT EXISTS dominios(
+    dominio varchar(20)
+);
+
+INSERT INTO dominios (dominio) VALUES('@gmail.com');
+INSERT INTO dominios (dominio)VALUES('@hotmail.com');
+INSERT INTO dominios (dominio)VALUES('@yahoo.com');
+INSERT INTO dominios (dominio)VALUES('@usb.ve');
+INSERT INTO dominios (dominio)VALUES('@bankofamerica.com');
+
+SELECT * FROM dominios;
+
+CREATE TABLE IF NOT EXISTS Email1 (
+    email varchar(128) NOT NULL
+);
+
+
 
 CREATE FUNCTION crea_data_cliente(numero integer) 
 RETURNS integer AS $$
@@ -87,17 +115,25 @@ DECLARE
     nombrecito varchar(35);
     apellidito varchar(35);
     per numeric;
-
+    v_nextval INT;
+    user_name varchar(80);
+    dom varchar(20);
+    contrasena varchar(64);
 BEGIN
     WHILE TRUE LOOP
         WHILE i <= numero LOOP
             aleatorio := floor(random() * 11);
             SELECT first_name_children, porcentaje INTO nombrecito, per FROM nomb ORDER BY random() LIMIT 1;
-            SELECT last_name INTO apellidito FROM last_name ORDER BY RANDOM() LIMIT 1;
+            SELECT last_name INTO apellidito FROM Last_name ORDER BY RANDOM() LIMIT 1;
+            SELECT NEXTVAL('user_seq') INTO v_nextval;
+            SELECT dominio INTO dom FROM dominios ORDER BY RANDOM() LIMIT 1;
+            SELECT password INTO contrasena FROM Passwords ORDER BY RANDOM() LIMIT 1;
             IF aleatorio < per THEN
+                user_name := CONCAT(nombrecito,'.',apellidito,'.',v_nextval);
                 INSERT INTO First_name1 (first_name1) VALUES (nombrecito);
                 INSERT INTO Apellido (lastname) VALUES (apellidito);
-
+                INSERT INTO Username1 (username) VALUES(user_name);
+                INSERT INTO Email1 (email) VALUES(CONCAT(user_name,dom));
                 i := i + 1; 
             END IF;
 
@@ -116,3 +152,5 @@ $$ LANGUAGE plpgsql;
 SELECT crea_data_cliente(25);
 SELECT * FROM First_name1;
 SELECT * FROM Apellido;
+SELECT * FROM Username1;
+SELECT * FROM Email1;
