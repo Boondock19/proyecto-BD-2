@@ -64,11 +64,11 @@ BEGIN
         ORDER BY randomPopulation
         LIMIT 1;
 
-        SELECT first_name,last_name INTO first_name_random,second_name_random FROM First_name,Last_name
+        SELECT first_name1,lastname INTO first_name_random,second_name_random FROM First_name1,Apellido
         ORDER BY random()
         LIMIT 1;
 
-        SELECT username INTO user_name_random FROM Username
+        SELECT username INTO user_name_random FROM Username1
         ORDER BY random()
         LIMIT 1;
 
@@ -76,7 +76,7 @@ BEGIN
         ORDER BY random()
         LIMIT 1;
 
-        SELECT email INTO email_random FROM Email
+        SELECT email INTO email_random FROM Email1
         ORDER BY random()
         LIMIT 1;
 

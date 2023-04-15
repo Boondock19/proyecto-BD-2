@@ -127,7 +127,7 @@ BEGIN
             SELECT last_name INTO apellidito FROM Last_name ORDER BY RANDOM() LIMIT 1;
             SELECT NEXTVAL('user_seq') INTO v_nextval;
             SELECT dominio INTO dom FROM dominios ORDER BY RANDOM() LIMIT 1;
-            SELECT password INTO contrasena FROM Passwords ORDER BY RANDOM() LIMIT 1;
+            SELECT password INTO contrasena FROM Password ORDER BY RANDOM() LIMIT 1;
             IF aleatorio < per THEN
                 user_name := CONCAT(nombrecito,'.',apellidito,'.',v_nextval);
                 INSERT INTO First_name1 (first_name1) VALUES (nombrecito);
@@ -149,7 +149,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT crea_data_cliente(25);
+SELECT crea_data_cliente(500);
 SELECT * FROM First_name1;
 SELECT * FROM Apellido;
 SELECT * FROM Username1;
