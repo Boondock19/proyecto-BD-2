@@ -1,5 +1,9 @@
 \connect GroceryStoreData-1510627-1210921
 
+DROP FUNCTION IF EXISTS crea_data_cliente;
+DROP TABLE IF EXISTS First_name1;
+DROP TABLE IF EXISTS fullname;
+
 CREATE TEMP TABLE nombresillos(
     ano int,
     sexo varchar(8),
@@ -63,94 +67,52 @@ WHERE nomb.first_name_children = subquery.first_name_children;
 
 SELECT * FROM nomb;
 
+CREATE TABLE IF NOT EXISTS First_name1 (
+    first_name1 varchar(64) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Apellido (
+    lastname varchar(64) NOT NULL
+);
 -- Funcion
 
 CREATE FUNCTION crea_data_cliente(numero integer) 
 RETURNS integer AS $$
 DECLARE
-    contador integer := 0;
     i integer := 1;
     nombre text;
-    aleatorio := numeric;
+    aleatorio numeric := 0;
+    --aleatorio2 := numeric;
+    aux boolean := FALSE;
+    nombrecito varchar(35);
+    apellidito varchar(35);
+    per numeric;
+
 BEGIN
-    WHILE i <= numero LOOP
-        aleatorio := floor(random() * 11);
-        SELECT @nombrecito := first_name_children, @per := porcentaje INTO nombre FROM nomb;
-        IF aleatorio < @per THEN --Donde esta el 0,03 va el porcentaje de la tabla
-            --insert a la tabla de la data ficticia
-            INSERT INTO customer (first_name) VALUES (@nombrecito);
-            i := i + 1;
+    WHILE TRUE LOOP
+        WHILE i <= numero LOOP
+            aleatorio := floor(random() * 11);
+            SELECT first_name_children, porcentaje INTO nombrecito, per FROM nomb ORDER BY random() LIMIT 1;
+            SELECT last_name INTO apellidito FROM last_name ORDER BY RANDOM() LIMIT 1;
+            IF aleatorio < per THEN
+                INSERT INTO First_name1 (first_name1) VALUES (nombrecito);
+                INSERT INTO Apellido (lastname) VALUES (apellidito);
+
+                i := i + 1; 
+            END IF;
+
+            IF i-1 = numero THEN
+                aux := TRUE;
+            END IF;
+        END LOOP;
+
+        if aux THEN
+            RETURN 1;
         END IF;
     END LOOP;
-    RETURN contador;
 END;
 $$ LANGUAGE plpgsql;
 
-
-[0:31 p. m., 15/4/2023] Jose Matías González: Puedes crear un stored procedure en PostgreSQL que reciba como parámetro la cantidad de inserciones que deseas realizar y que realice las consultas necesarias para crear y luego insertar las filas en una tabla.
-
-Por ejemplo, supongamos que tienes las tablas `tabla1`, `tabla2` y `tabla3`, y que deseas insertar `n` filas en la tabla `tabla_destino`. Puedes crear un stored procedure llamado `sp_insertar_filas` que reciba como parámetro la cantidad de inserciones y que realice las consultas necesarias para crear y luego insertar las filas en la tabla `tabla_destino`. El stored procedure podría tener el siguiente código:
-
-
-CREATE OR REPLACE PROCEDURE sp_insertar_filas(n INTEGER)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    i INTEGER;
-BEGIN
-    FOR i IN 1..n LOOP
-        -- Consultas para crear la fila
-        -- ...
-        
-        -- Inserción de la fila en la tabla_destino
-        INSERT INTO tabla_destino (columna1, columna2, columna3)
-        VALUES (valor1, valor2, valor3);
-    END LOOP;
-END;
-$$;
-
-
-En este ejemplo, el stored procedure `sp_insertar_filas` recibe como parámetro la cantidad de inserciones que deseas realizar y utiliza un bucle `FOR` para realizar las consultas necesarias y luego insertar las filas en la tabla `tabla_destino`. Dentro del bucle `FOR`, debes reemplazar las consultas para crear la fila y los valores de las columnas en la inserción por las consultas y valores que correspondan a tu caso específico.
-
-Luego, para llamar al stored procedure y realizar las inserciones, puedes ejecutar la siguiente sentencia SQL:
-
-
-CALL sp_insertar_filas(10);
-
-
-En este ejemplo, se llama al stored procedure `sp_insertar_filas` y se le pasa como parámetro el valor `10`, lo que indica que se deben realizar 10 inserciones en la tabla `tabla_destino`.
-[0:31 p. m., 15/4/2023] Jose Matías González: Claro, te puedo dar un ejemplo más específico. Supongamos que tienes una tabla llamada `tabla_origen` con las columnas `id`, `nombre` y `apellido`, y deseas insertar `n` filas en la tabla `tabla_destino` con las columnas `id_destino`, `nombre_completo` y `fecha_creacion`. Puedes crear un stored procedure llamado `sp_insertar_filas` que reciba como parámetro la cantidad de inserciones y que realice las consultas necesarias para crear y luego insertar las filas en la tabla `tabla_destino`. El stored procedure podría tener el siguiente código:
-
-
-CREATE OR REPLACE PROCEDURE sp_insertar_filas(n INTEGER)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    i INTEGER;
-    id_origen INTEGER;
-    nombre_completo TEXT;
-BEGIN
-    FOR i IN 1..n LOOP
-        -- Consulta para obtener el id de la tabla_origen
-        SELECT id INTO id_origen FROM tabla_origen ORDER BY RANDOM() LIMIT 1;
-        
-        -- Consulta para obtener el nombre completo
-        SELECT CONCAT(nombre, ' ', apellido) INTO nombre_completo FROM tabla_origen WHERE id = id_origen;
-        
-        -- Inserción de la fila en la tabla_destino
-        INSERT INTO tabla_destino (id_destino, nombre_completo, fecha_creacion)
-        VALUES (id_origen, nombre_completo, NOW());
-    END LOOP;
-END;
-$$;
-
-
-En este ejemplo, el stored procedure `sp_insertar_filas` recibe como parámetro la cantidad de inserciones que deseas realizar y utiliza un bucle `FOR` para realizar las consultas necesarias y luego insertar las filas en la tabla `tabla_destino`. Dentro del bucle `FOR`, se realizan dos consultas para obtener el `id` y el `nombre_completo` de una fila aleatoria de la tabla `tabla_origen`. Luego, se inserta una fila en la tabla `tabla_destino` con el `id` obtenido de la tabla `tabla_origen`, el `nombre_completo` obtenido y la fecha actual.
-
-Luego, para llamar al stored procedure y realizar las inserciones, puedes ejecutar la siguiente sentencia SQL:
-
-
-CALL sp_insertar_filas(10);
-
-
-En este ejemplo, se llama al stored procedure `sp_insertar_filas` y se le pasa como parámetro el valor `10`, lo que indica que se deben realizar 10 inserciones en la tabla `tabla_destino`.
+SELECT crea_data_cliente(25);
+SELECT * FROM First_name1;
+SELECT * FROM Apellido;

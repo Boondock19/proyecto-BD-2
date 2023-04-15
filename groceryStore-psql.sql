@@ -99,13 +99,13 @@ CREATE TEMP TABLE IF NOT EXISTS Temp_passwords (
 
 \COPY Temp_passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TABLE IF NOT EXISTS Passwords (
+CREATE TABLE IF NOT EXISTS Password (
     id SERIAL,
     password varchar(64) NOT NULL,
     CONSTRAINT password_pk PRIMARY KEY (id)
 );
 
-INSERT INTO Passwords (password)
+INSERT INTO Password (password)
 SELECT password FROM Temp_passwords;
 
 
@@ -355,7 +355,7 @@ ON CONFLICT (city_name,postal_code) DO NOTHING;
 SELECT * FROM city;
 
 CREATE TABLE IF NOT EXISTS customer (
-    id INT  NOT NULL AUTO_INCREMENT,
+    id SERIAL,
     first_name varchar(64)  NOT NULL,
     last_name varchar(64)  NOT NULL,
     user_name varchar(64)  NOT NULL,
