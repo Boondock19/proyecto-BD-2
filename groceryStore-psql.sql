@@ -139,22 +139,12 @@ CREATE TABLE IF NOT EXISTS Phone_number (
 INSERT INTO Phone_number (phone_number)
 SELECT phone_number FROM Temp_phone_number;
 
-CREATE TEMP TABLE city_postal_codes (
-   city varchar(128),
-   postal_code varchar(16)
+CREATE TABLE IF NOT EXISTS Temp_address (
+    address varchar(255) NOT NULL
 );
-
-\COPY city_postal_codes FROM 'cityPostalCode.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
-
-CREATE TEMP TABLE IF NOT EXISTS Temp_address (
-   address varchar(255)
-);
-
 
 
 \COPY Temp_address FROM 'address.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
-
-
 
 CREATE TABLE IF NOT EXISTS Address (
     id SERIAL,
@@ -349,7 +339,7 @@ CREATE TABLE IF NOT EXISTS city (
 );
 
 INSERT INTO city (city_name,postal_code)
-SELECT city,postal_code FROM city_postal_codes
+SELECT city,zips FROM City_with_Population
 ON CONFLICT (city_name,postal_code) DO NOTHING;
 
 SELECT * FROM city;
