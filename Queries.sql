@@ -53,3 +53,7 @@ CALL insert_customers(5);
 SELECT * FROM Customer;
 
 CALL random_city();
+
+CALL insert_items(25);
+
+SELECT * FROM item;

@@ -105,6 +105,44 @@ END
 $$ LANGUAGE plpgsql;
 
 
+
+CREATE OR REPLACE PROCEDURE insert_items(number_of_items INT)
+AS $$
+DECLARE
+    i INTEGER;
+    selected_unit RECORD;
+    item_name_random TEXT;
+    price_random decimal(10,2);
+    item_photo_random TEXT;
+    description_random TEXT;
+
+BEGIN
+
+    FOR i IN 1..number_of_items LOOP
+        SELECT id INTO selected_unit
+        FROM UNIT
+        ORDER BY RANDOM()
+        LIMIT 1;
+
+        SELECT (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
+        ORDER BY random()
+        LIMIT 1;
+
+        SELECT RANDOM()*(1000-1)+1 INTO price_random;
+
+        SELECT 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eleifend' INTO description_random;
+
+        SELECT 'https://picsum.photos/id/237/200/300' INTO item_photo_random;
+
+        INSERT INTO item (item_name,price,item_photo ,description,unit_id)
+        VALUES (item_name_random, price_random, description_random, item_photo_random,selected_unit.id);
+    END LOOP;
+
+    
+END
+$$ LANGUAGE plpgsql;
+
+
 CREATE PROCEDURE spCreateTestData (number_of_customers int, number_of_orders int, number_of_items int , avg_items_per_order int)
 AS $$
 BEGIN

@@ -442,7 +442,7 @@ SELECT unit_name,unit_short FROM Temp_unit;
 
 -- Table: item
 CREATE TABLE item (
-    id int  NOT NULL,
+    id SERIAL,
     item_name varchar(255)  NOT NULL,
     price decimal(10,2)  NOT NULL,
     item_photo text  NULL,

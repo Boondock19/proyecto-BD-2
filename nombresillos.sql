@@ -150,7 +150,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT crea_data_cliente(500);
-SELECT * FROM First_name1;
-SELECT * FROM Apellido;
-SELECT * FROM Username1;
-SELECT * FROM Email1;
+-- SELECT * FROM First_name1;
+-- SELECT * FROM Apellido;
+-- SELECT * FROM Username1;
+-- SELECT * FROM Email1;
