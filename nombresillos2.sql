@@ -1,5 +1,9 @@
 \connect GroceryStoreData-1510627-1210921
 
+DROP FUNCTION IF EXISTS crea_data_cliente;
+DROP TABLE IF EXISTS First_name1;
+DROP TABLE IF EXISTS fullname;
+
 CREATE TEMP TABLE nombresillos(
     ano int,
     sexo varchar(8),
@@ -63,27 +67,52 @@ WHERE nomb.first_name_children = subquery.first_name_children;
 
 SELECT * FROM nomb;
 
+CREATE TABLE IF NOT EXISTS First_name1 (
+    first_name1 varchar(64) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Apellido (
+    lastname varchar(64) NOT NULL
+);
 -- Funcion
 
 CREATE FUNCTION crea_data_cliente(numero integer) 
 RETURNS integer AS $$
 DECLARE
-    contador integer := 0;
     i integer := 1;
     nombre text;
-    aleatorio := numeric;
+    aleatorio numeric := 0;
+    --aleatorio2 := numeric;
+    aux boolean := FALSE;
+    nombrecito varchar(35);
+    apellidito varchar(35);
+    per numeric;
+
 BEGIN
-    WHILE i <= numero LOOP
-        aleatorio := floor(random() * 11);
-        SELECT @nombrecito := first_name_children, @per := porcentaje INTO nombre FROM nomb;
-        IF aleatorio < @per THEN --Donde esta el 0,03 va el porcentaje de la tabla
-            --insert a la tabla de la data ficticia
-            INSERT INTO customer (first_name) VALUES (@nombrecito);
-            i := i + 1;
+    WHILE TRUE LOOP
+        WHILE i <= numero LOOP
+            aleatorio := floor(random() * 11);
+            SELECT first_name_children, porcentaje INTO nombrecito, per FROM nomb ORDER BY random() LIMIT 1;
+            SELECT last_name INTO apellidito FROM Last_name ORDER BY RANDOM() LIMIT 1;
+            IF aleatorio < per THEN
+                INSERT INTO First_name1 (first_name1) VALUES (nombrecito);
+                INSERT INTO Apellido (lastname) VALUES (apellidito);
+
+                i := i + 1; 
+            END IF;
+
+            IF i-1 = numero THEN
+                aux := TRUE;
+            END IF;
+        END LOOP;
+
+        if aux THEN
+            RETURN 1;
         END IF;
     END LOOP;
-    RETURN contador;
 END;
 $$ LANGUAGE plpgsql;
 
-
+SELECT crea_data_cliente(25);
+SELECT * FROM First_name1;
+SELECT * FROM Apellido;
