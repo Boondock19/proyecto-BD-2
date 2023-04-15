@@ -43,52 +43,100 @@ CREATE TEMP TABLE Temp_data (
 \COPY Temp_data FROM 'groceryStoreData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
 
-CREATE TEMP TABLE IF NOT EXISTS First_name (
+CREATE TEMP TABLE IF NOT EXISTS Temp_first_name (
     first_name varchar(64) NOT NULL
 );
 
-\COPY First_name FROM 'namesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_first_name FROM 'namesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Last_name (
-    
+CREATE TABLE IF NOT EXISTS First_name (
+    id SERIAL,
+    first_name varchar(64) NOT NULL,
+    CONSTRAINT first_name_pk PRIMARY KEY (id)
+);
+
+INSERT INTO First_name (first_name)
+SELECT first_name FROM Temp_first_name;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_Last_name (
     last_name varchar(64) NOT NULL
 );
 
-\COPY Last_name FROM 'lastNamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_Last_name FROM 'lastNamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Email (
-    
+CREATE TABLE IF NOT EXISTS Last_name (
+    id SERIAL,
+    last_name varchar(64) NOT NULL,
+    CONSTRAINT last_name_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Last_name (last_name)
+SELECT last_name FROM Temp_Last_name;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_email (
     email varchar(128) NOT NULL
 );
 
-\COPY Email FROM 'userEmailsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Passwords (
-    
+
+\COPY Temp_email FROM 'userEmailsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Email (
+    id SERIAL,
+    email varchar(128) NOT NULL,
+    CONSTRAINT email_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Email (email)
+SELECT email FROM Temp_email;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_passwords (
     password varchar(64) NOT NULL
 );
 
-\COPY Passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Username (
-    
-    username varchar(64) NOT NULL
 
+\COPY Temp_passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Passwords (
+    id SERIAL,
+    password varchar(64) NOT NULL,
+    CONSTRAINT password_pk PRIMARY KEY (id)
 );
 
-\COPY Username FROM 'usernamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+INSERT INTO Passwords (password)
+SELECT password FROM Temp_passwords;
 
-CREATE TEMP TABLE IF NOT EXISTS Phone_number (
-    
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_username (
+    username varchar(64) NOT NULL
+);
+
+\COPY Temp_username FROM 'usernamesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Username (
+    id SERIAL,
+    username varchar(64) NOT NULL,
+    CONSTRAINT username_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Username (username)
+SELECT username FROM Temp_username;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_phone_number (
     phone_number varchar(128) NOT NULL
 );
 
-\COPY Phone_number FROM 'userPhonesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_phone_number FROM 'userPhonesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Food (
-    
-    food varchar(64) NOT NULL
+CREATE TABLE IF NOT EXISTS Phone_number (
+    id SERIAL,
+    phone_number varchar(128) NOT NULL,
+    CONSTRAINT phone_number_pk PRIMARY KEY (id)
 );
+
+INSERT INTO Phone_number (phone_number)
+SELECT phone_number FROM Temp_phone_number;
 
 CREATE TEMP TABLE city_postal_codes (
    city varchar(128),
@@ -109,14 +157,40 @@ CREATE TEMP TABLE delivery_address (
 
 \COPY delivery_address FROM 'deliveryAddress.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-\COPY Food(food) FROM 'food.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+CREATE TEMP TABLE IF NOT EXISTS Temp_food (
+    food varchar(64) NOT NULL,
+    science_name varchar(64),
+    group_2 varchar(64),
+    sub_group varchar(64)
+);
 
-CREATE TEMP TABLE IF NOT EXISTS Brand_name (
+
+\COPY Temp_food FROM 'food.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Food (
+    id SERIAL,
+    food varchar(64) NOT NULL,
+    CONSTRAINT food_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Food (food)
+SELECT food FROM Temp_food;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_brand_name (
     
     brand_name varchar(64) NOT NULL
 );
 
-\COPY Brand_name FROM 'brandNames.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_brand_name FROM 'brandNames.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Brand_name (
+    id SERIAL,
+    brand_name varchar(64) NOT NULL,
+    CONSTRAINT brand_name_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Brand_name (brand_name)
+SELECT brand_name FROM Temp_brand_name;
 
 CREATE TEMP TABLE IF NOT EXISTS time_inserted (
     
@@ -132,19 +206,37 @@ CREATE TEMP TABLE IF NOT EXISTS time_confirmed (
 
 \COPY time_confirmed FROM 'timeConfirmed.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS confirmation_code (
+CREATE TEMP TABLE IF NOT EXISTS Temp_confirmation_code (
     
     confirmation_code varchar(255) NOT NULL
 );
 
-\COPY confirmation_code FROM 'confirmationCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_confirmation_code FROM 'confirmationCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS Employee_code (
+CREATE TABLE IF NOT EXISTS Confirmation_code (
+    id SERIAL,
+    confirmation_code varchar(255) NOT NULL,
+    CONSTRAINT confirmation_code_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Confirmation_code (confirmation_code)
+SELECT confirmation_code FROM Temp_confirmation_code;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_employee_code (
     employee_code varchar(32) NOT NULL
 );
 
-\COPY Employee_code FROM 'employeeCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_employee_code FROM 'employeeCodesData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
+CREATE TABLE IF NOT EXISTS Employee_code (
+    id SERIAL,
+    employee_code varchar(32) NOT NULL,
+    CONSTRAINT employee_code_pk PRIMARY KEY (id)
+);
+
+
+INSERT INTO Employee_code (employee_code)
+SELECT employee_code FROM Temp_employee_code;
 
 CREATE TEMP TABLE IF NOT EXISTS Temp_unit (
     unit_name varchar(64) NOT NULL,
@@ -152,6 +244,7 @@ CREATE TEMP TABLE IF NOT EXISTS Temp_unit (
 );
 
 \COPY Temp_unit FROM 'unitsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
 
 CREATE TABLE IF NOT EXISTS city (
     id SERIAL  NOT NULL,
@@ -238,13 +331,16 @@ CREATE TABLE box (
 );
 
 CREATE TABLE IF NOT EXISTS unit (
-    id int  NOT NULL,
+    id SERIAL  NOT NULL,
     unit_name varchar(64)  NOT NULL,
     unit_short varchar(8)  NULL,
     CONSTRAINT unit_ak_1 UNIQUE (unit_name) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT unit_ak_2 UNIQUE (unit_short) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT unit_pk PRIMARY KEY (id)
 );
+
+INSERT INTO unit (unit_name,unit_short)
+SELECT unit_name,unit_short FROM Temp_unit;
 
 -- Table: item
 CREATE TABLE item (

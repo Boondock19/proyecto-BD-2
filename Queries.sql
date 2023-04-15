@@ -35,7 +35,7 @@ SELECT * FROM Employee_code;
 
 -- Unit
 
-DROP TABLE IF EXISTS Unit;
+SELECT * FROM Unit;
 
 
-
+CALL insert_customers(5);
