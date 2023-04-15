@@ -16,31 +16,31 @@ DROP TABLE IF EXISTS Unit;
 
 \connect GroceryStoreData-1510627-1210921;
 
-CREATE TEMP TABLE Temp_data (
-    CustomerFirstName varchar(64),
-    CustomerLastName varchar(64),
-    CustomerUserName varchar(64),
-    CustomerPassword varchar(64),
-    UserTimeInserted timestamp,
-    CustomerAddress varchar(64),
-    CustomerDeliveryAddress varchar(255),
-    CustomerEmail varchar(128),
-    CustomerPhone varchar(128),
-    CustomerConfirmationCode varchar(255),
-    EmployeeCode varchar(32),
-    EmployeeFirstName varchar(64),
-    EmployeeLastName varchar(64),
-    CityName varchar(128),
-    CityPostalCode varchar(16),
-    UnitName varchar(64),
-    UnitShort varchar(8),
-    -- CatalogStatusName varchar(128),
-    TimeInserted timestamp,
-    TimeConfirmed timestamp
+-- CREATE TEMP TABLE Temp_data (
+--     CustomerFirstName varchar(64),
+--     CustomerLastName varchar(64),
+--     CustomerUserName varchar(64),
+--     CustomerPassword varchar(64),
+--     UserTimeInserted timestamp,
+--     CustomerAddress varchar(64),
+--     CustomerDeliveryAddress varchar(255),
+--     CustomerEmail varchar(128),
+--     CustomerPhone varchar(128),
+--     CustomerConfirmationCode varchar(255),
+--     EmployeeCode varchar(32),
+--     EmployeeFirstName varchar(64),
+--     EmployeeLastName varchar(64),
+--     CityName varchar(128),
+--     CityPostalCode varchar(16),
+--     UnitName varchar(64),
+--     UnitShort varchar(8),
+--     -- CatalogStatusName varchar(128),
+--     TimeInserted timestamp,
+--     TimeConfirmed timestamp
 
-);
+-- );
 
-\COPY Temp_data FROM 'groceryStoreData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+-- \COPY Temp_data FROM 'groceryStoreData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
 
 CREATE TEMP TABLE IF NOT EXISTS Temp_first_name (
@@ -354,7 +354,7 @@ ON CONFLICT (city_name,postal_code) DO NOTHING;
 SELECT * FROM city;
 
 CREATE TABLE IF NOT EXISTS customer (
-    id int  NOT NULL,
+    id SERIAL  NOT NULL,
     first_name varchar(64)  NOT NULL,
     last_name varchar(64)  NOT NULL,
     user_name varchar(64)  NOT NULL,
