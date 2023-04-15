@@ -145,17 +145,90 @@ CREATE TEMP TABLE city_postal_codes (
 
 \COPY city_postal_codes FROM 'cityPostalCode.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS address (
+CREATE TEMP TABLE IF NOT EXISTS Temp_address (
    address varchar(255)
 );
 
-\COPY address FROM 'address.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE delivery_address (
+
+\COPY Temp_address FROM 'address.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+
+
+CREATE TABLE IF NOT EXISTS Address (
+    id SERIAL,
+    address varchar(255) NOT NULL,
+    CONSTRAINT address_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Address (address)
+SELECT address FROM Temp_address;
+
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_city (
+    city varchar(128) NOT NULL,
+    city_ascii varchar(128) NOT NULL,
+    state_id varchar(16) NOT NULL,
+    state_name varchar(64) NOT NULL,
+    county_fips varchar(16) NOT NULL,
+    county_name varchar(64) NOT NULL,
+    lat varchar(16) NOT NULL,
+    lng varchar(16) NOT NULL,
+    population varchar(16) NOT NULL,
+    density varchar(16) NOT NULL,
+    source varchar(16) NOT NULL,
+    military varchar(16) NOT NULL,
+    incorporated varchar(16) NOT NULL,
+    timezone varchar(64) NOT NULL,
+    ranking varchar(16) NOT NULL,
+    zips varchar(32) NOT NULL,
+    id varchar(16) NOT NULL
+);
+
+\COPY Temp_city FROM 'uscities.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS City_with_Population (
+    id SERIAL,
+    city varchar(128) NOT NULL,
+    city_ascii varchar(128) NOT NULL,
+    state_id varchar(16) NOT NULL,
+    state_name varchar(64) NOT NULL,
+    county_fips varchar(16) NOT NULL,
+    county_name varchar(64) NOT NULL,
+    lat varchar(16) NOT NULL,
+    lng varchar(16) NOT NULL,
+    population varchar(16) NOT NULL,
+    density varchar(16) NOT NULL,
+    source varchar(16) NOT NULL,
+    military varchar(16) NOT NULL,
+    incorporated varchar(16) NOT NULL,
+    timezone varchar(64) NOT NULL,
+    ranking varchar(16) NOT NULL,
+    zips varchar(32) NOT NULL,
+    CONSTRAINT city_with_population_pk PRIMARY KEY (id)
+);
+
+INSERT INTO City_with_Population (city, city_ascii, state_id, state_name, county_fips, county_name, lat, lng, population, density, source, military, 
+incorporated, timezone, ranking, zips) SELECT city, city_ascii, state_id, state_name, county_fips, county_name, lat, lng, population, density, source, military, 
+incorporated, timezone, ranking, zips FROM Temp_city;
+
+ALTER TABLE City_with_Population DROP COLUMN city_ascii, DROP COLUMN state_id, DROP COLUMN state_name, DROP COLUMN county_fips, DROP COLUMN county_name, DROP COLUMN lat, DROP COLUMN lng, 
+DROP COLUMN density, DROP COLUMN source, DROP COLUMN military, DROP COLUMN incorporated, DROP COLUMN timezone, DROP COLUMN ranking;
+
+CREATE TEMP TABLE Temp_delivery_address (
    delivery_address varchar(255)
 );
 
-\COPY delivery_address FROM 'deliveryAddress.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_delivery_address FROM 'deliveryAddress.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Delivery_address (
+    id SERIAL,
+    delivery_address varchar(255) NOT NULL,
+    CONSTRAINT delivery_address_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Delivery_address (delivery_address)
+SELECT delivery_address FROM Temp_delivery_address;
 
 CREATE TEMP TABLE IF NOT EXISTS Temp_food (
     food varchar(64) NOT NULL,
@@ -192,19 +265,38 @@ CREATE TABLE IF NOT EXISTS Brand_name (
 INSERT INTO Brand_name (brand_name)
 SELECT brand_name FROM Temp_brand_name;
 
-CREATE TEMP TABLE IF NOT EXISTS time_inserted (
+CREATE TEMP TABLE IF NOT EXISTS Temp_time_inserted (
     
     time_inserted timestamp NOT NULL
 );
 
-\COPY time_inserted FROM 'timeInserted.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_time_inserted FROM 'timeInserted.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TEMP TABLE IF NOT EXISTS time_confirmed (
+
+CREATE TABLE IF NOT EXISTS Time_inserted (
+    id SERIAL,
+    time_inserted timestamp NOT NULL,
+    CONSTRAINT time_inserted_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Time_inserted (time_inserted)
+SELECT time_inserted FROM Temp_time_inserted;
+
+CREATE TEMP TABLE IF NOT EXISTS Temp_time_confirmed (
     
     time_confirmed timestamp NOT NULL
 );
 
-\COPY time_confirmed FROM 'timeConfirmed.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+\COPY Temp_time_confirmed FROM 'timeConfirmed.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
+
+CREATE TABLE IF NOT EXISTS Time_confirmed (
+    id SERIAL,
+    time_confirmed timestamp NOT NULL,
+    CONSTRAINT time_confirmed_pk PRIMARY KEY (id)
+);
+
+INSERT INTO Time_confirmed (time_confirmed)
+SELECT time_confirmed FROM Temp_time_confirmed;
 
 CREATE TEMP TABLE IF NOT EXISTS Temp_confirmation_code (
     
@@ -221,6 +313,7 @@ CREATE TABLE IF NOT EXISTS Confirmation_code (
 
 INSERT INTO Confirmation_code (confirmation_code)
 SELECT confirmation_code FROM Temp_confirmation_code;
+
 
 CREATE TEMP TABLE IF NOT EXISTS Temp_employee_code (
     employee_code varchar(32) NOT NULL

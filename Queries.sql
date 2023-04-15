@@ -37,5 +37,15 @@
 
 -- SELECT * FROM Unit;
 
+SELECT * FROM Address;
+
+SELECT * FROM Delivery_address;
+
+SELECT * FROM Time_inserted;
+
+SELECT * FROM Time_confirmed;
+
+SELECT * FROM City_with_Population;
+
 
 CALL insert_customers(5);
