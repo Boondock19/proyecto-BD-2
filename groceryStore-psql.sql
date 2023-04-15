@@ -99,11 +99,11 @@ CREATE TEMP TABLE IF NOT EXISTS Temp_passwords (
 
 \COPY Temp_passwords FROM 'passwordsData.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
-CREATE TABLE IF NOT EXISTS Password (
+CREATE TABLE IF NOT EXISTS Passwords (
     password varchar(64) NOT NULL
 );
 
-INSERT INTO Password (password)
+INSERT INTO Passwords (password)
 SELECT password FROM Temp_passwords;
 
 
@@ -271,7 +271,8 @@ CREATE TABLE IF NOT EXISTS Time_inserted (
 INSERT INTO Time_inserted (time_inserted)
 SELECT time_inserted FROM Temp_time_inserted;
 
-CREATE TEMP TABLE IF NOT EXISTS Temp_time_confirmed (
+CREATE TEMP TABLE IF NOT EXISTS Temp_
+e_confirmed (
     
     time_confirmed timestamp NOT NULL
 );
@@ -343,7 +344,7 @@ ON CONFLICT (city_name,postal_code) DO NOTHING;
 SELECT * FROM city;
 
 CREATE TABLE IF NOT EXISTS customer (
-    id SERIAL,
+    id INT NOT NULL,
     first_name varchar(64)  NOT NULL,
     last_name varchar(64)  NOT NULL,
     user_name varchar(64)  NOT NULL,
