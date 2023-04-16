@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS City;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS Unit;
-DROP TABLE IF EXISTS customer1;
+
 
 \connect GroceryStoreData-1510627-1210921;
 
@@ -337,22 +337,6 @@ CREATE TABLE IF NOT EXISTS customer (
     CONSTRAINT customer_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS customer1 (
-    first_name varchar(64)  NOT NULL,
-    last_name varchar(64)   NULL,
-    user_name varchar(64)   NULL,
-    password varchar(64)   NULL,
-    time_inserted timestamp   NULL,
-    confirmation_code varchar(255)   NULL,
-    time_confirmed timestamp  NULL,
-    contact_email varchar(128)   NULL,
-    contact_phone varchar(128)  NULL,
-    city_id int  NULL,
-    address varchar(255)  NULL,
-    delivery_city_id int  NULL,
-    delivery_address varchar(255)  NULL
-);
-
 -- Table: employee
 CREATE TABLE IF NOT EXISTS employee (
     id SERIAL,
@@ -432,7 +416,7 @@ CREATE TABLE item_in_box (
     id int  NOT NULL,
     box_id int  NOT NULL,
     item_id int  NOT NULL,
-    qunatity decimal(10,3)  NOT NULL,
+    quantity decimal(10,3)  NOT NULL,
     is_replacement bool  NOT NULL,
     CONSTRAINT item_in_box_pk PRIMARY KEY (id),
     CONSTRAINT item_in_box_box FOREIGN KEY (box_id) REFERENCES box (id) NOT DEFERRABLE INITIALLY IMMEDIATE,
