@@ -21,7 +21,7 @@ CREATE TEMP TABLE nombresillos(
 \COPY nombresillos FROM 'nombresillos.csv' WITH (FORMAT csv, DELIMITER ',', HEADER true);
 
 
-CREATE TEMP TABLE nomb(
+CREATE TABLE nomb(
     sexo varchar(8),
     first_name_children varchar(35),
     total_count int
@@ -193,12 +193,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT crea_data_cliente(25);
-CALL insert_Employees(FLOOR(25*0.55)::INTEGER);
--- SELECT * FROM First_name1;
--- SELECT * FROM Apellido;
--- SELECT * FROM Username1;
--- SELECT * FROM Email1;
--- SELECT * FROM tiempito;
-SELECT * FROM Customer;
-SELECT * FROM Employee;
+-- SELECT crea_data_cliente(25);
+-- CALL insert_Employees(FLOOR(25*0.55)::INTEGER);
+-- -- SELECT * FROM First_name1;
+-- -- SELECT * FROM Apellido;
+-- -- SELECT * FROM Username1;
+-- -- SELECT * FROM Email1;
+-- -- SELECT * FROM tiempito;
+-- SELECT * FROM Customer;
+-- SELECT * FROM Employee;

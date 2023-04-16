@@ -48,14 +48,21 @@
 -- SELECT * FROM City_with_Population;
 
 
+-- SELECT * FROM Customer;
+
+-- -- CALL random_city();
+
+-- CALL insert_items(25);
+
+-- SELECT * FROM item;
+
+-- CALL insert_orders(45);
+
+-- SELECT * FROM placed_order;
+
+CALL spCreateTestData (25, 45, 25 ,10);
+
 SELECT * FROM Customer;
-
--- CALL random_city();
-
-CALL insert_items(25);
-
+SELECT * FROM Employee;
 SELECT * FROM item;
-
-CALL insert_orders(45);
-
 SELECT * FROM placed_order;

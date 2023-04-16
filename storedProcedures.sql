@@ -203,10 +203,12 @@ CREATE PROCEDURE spCreateTestData (number_of_customers int, number_of_orders int
 AS $$
 BEGIN
 
-CALL insertCustomers(number_of_customers);
-CALL insertOrders(number_of_orders);
-CALL insertItems(number_of_items);
--- CALL insertEmployess(number_of_employees);
+
+PERFORM crea_data_cliente(number_of_customers);
+CALL insert_Employees(FLOOR(number_of_customers*0.55)::INTEGER);
+CALL insert_items(number_of_items);
+CALL insert_orders(number_of_orders);
+
 
 END
 $$ LANGUAGE plpgsql;
