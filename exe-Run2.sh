@@ -11,7 +11,6 @@ then
     exit 127
 fi
 
-
 echo "Escriba el nombre de su servidor en caso de no escribir sera localhost"
 echo -n "Server [localhost]: "
 read SERVER
