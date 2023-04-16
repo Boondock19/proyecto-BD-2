@@ -55,3 +55,7 @@ SELECT * FROM Customer;
 CALL insert_items(25);
 
 SELECT * FROM item;
+
+CALL insert_orders(45);
+
+SELECT * FROM placed_order;

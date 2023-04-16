@@ -70,7 +70,7 @@ FROM (
 ) AS subquery
 WHERE nomb.first_name_children = subquery.first_name_children;
 
-SELECT * FROM nomb;
+-- SELECT * FROM nomb;
 
 CREATE TABLE IF NOT EXISTS First_name1 (
     first_name1 varchar(64) NOT NULL

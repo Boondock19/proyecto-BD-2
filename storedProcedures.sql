@@ -169,6 +169,34 @@ BEGIN
     
 END
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE PROCEDURE insert_orders(number_of_orders INT)
+AS $$
+DECLARE
+    i INTEGER;
+    customer_id_random int;  
+    time_placed_now timestamp;
+    details_random text;
+    delivery_city_id_random int;  
+    delivery_address_random varchar(255);  
+    grade_customer_random int;
+    grade_employee_random int;
+
+BEGIN
+  
+    FOR i IN 1..number_of_orders LOOP
+        SELECT id,delivery_city_id,delivery_address,FLOOR(RANDOM()*(100-1)+1)::INTEGER,FLOOR(RANDOM()*(50-1)+1)::INTEGER
+        INTO customer_id_random,delivery_city_id_random,delivery_address_random,grade_customer_random,grade_employee_random 
+        FROM Customer ORDER BY random() LIMIT 1;
+        SELECT 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eleifend' INTO details_random;
+        INSERT INTO placed_order(customer_id,time_placed,details,delivery_city_id,delivery_address,grade_customer,grade_employee) 
+        VALUES (customer_id_random,NOW(),details_random,delivery_city_id_random,delivery_address_random,grade_customer_random,grade_employee_random);
+    END LOOP;
+
+    
+END
+$$ LANGUAGE plpgsql;
  
 
 CREATE PROCEDURE spCreateTestData (number_of_customers int, number_of_orders int, number_of_items int , avg_items_per_order int)

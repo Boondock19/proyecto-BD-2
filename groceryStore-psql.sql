@@ -341,7 +341,7 @@ INSERT INTO city (city_name,postal_code)
 SELECT city,zips FROM City_with_Population
 ON CONFLICT (city_name,postal_code) DO NOTHING;
 
-SELECT * FROM city;
+-- SELECT * FROM city;
 
 CREATE TABLE IF NOT EXISTS customer (
     id INT NOT NULL,
@@ -391,7 +391,7 @@ CREATE TABLE IF NOT EXISTS employee (
 );
 -- Table: placed_order
 CREATE TABLE placed_order (
-    id int  NOT NULL,
+    id SERIAL,
     customer_id int  NOT NULL,
     time_placed timestamp  NOT NULL,
     details text  NULL,
