@@ -1,5 +1,3 @@
-
-
 CREATE OR REPLACE PROCEDURE random_city()
 AS $$
 DECLARE
@@ -35,28 +33,6 @@ DECLARE
     address_random TEXT;
     delivery_address_random TEXT;
 BEGIN
-
-    -- CREATE TEMP TABLE RESULT (
-    --     first_name VARCHAR(64),
-    --     last_name VARCHAR(64)
-    -- );
-
-
-    -- INSERT INTO RESULT (first_name, last_name) SELECT first_name,last_name FROM First_name,Last_name
-    -- ORDER BY random() LIMIT number_of_customers;
-
-    -- FOR items IN SELECT * FROM RESULT LOOP
-    -- RAISE NOTICE 'first_name: %, last_name: %', quote_ident(items.first_name), quote_ident(items.last_name);
-    -- END LOOP;
-
-    
-    -- CALL random_city();
-    -- RAISE NOTICE 'Selectd id: % , Selected city: %, population: %', selected_city.id ,selected_city.city, selected_city.randomPopulation;
-
-    -- FOR i IN SELECT * FROM RESULT LOOP
-    --     INSERT INTO Customer (first_name, last_name, user_name, password, time_inserted, confirmation_code, time_confirmed, contact_email, contact_phone, city_id, address, delivery_city_id, delivery_address)
-    --     VALUES (i.first_name, i.last_name, i.first_name || i.last_name, i.first_name || i.last_name, now(), i.first_name || i.last_name, now(), i.first_name || i.last_name || '@gmail.com', '123456789', 1, 'Calle 1', 1, 'Calle 2');
-    -- END LOOP;
 
     FOR i IN 1..number_of_customers LOOP
         SELECT id,city,(random() * population::INTEGER) AS randomPopulation  INTO selected_city
@@ -131,10 +107,6 @@ BEGIN
         ) t
         ORDER BY Random()
         LIMIT 1;
-
-        -- SELECT  (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
-        -- ORDER BY random()
-        -- LIMIT 1;
 
         SELECT RANDOM()*(1000-1)+1 INTO price_random;
 
