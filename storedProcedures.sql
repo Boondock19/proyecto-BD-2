@@ -124,9 +124,17 @@ BEGIN
         ORDER BY RANDOM()
         LIMIT 1;
 
-        SELECT  (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
-        ORDER BY random()
+        SELECT name_concat INTO item_name_random
+        FROM (
+            SELECT DISTINCT concat(food, ' ',brand_name) as name_concat
+            FROM Food, Brand_name
+        ) t
+        ORDER BY Random()
         LIMIT 1;
+
+        -- SELECT  (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
+        -- ORDER BY random()
+        -- LIMIT 1;
 
         SELECT RANDOM()*(1000-1)+1 INTO price_random;
 
