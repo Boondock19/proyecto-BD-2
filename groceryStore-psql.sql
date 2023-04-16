@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS customer1 (
 
 -- Table: employee
 CREATE TABLE IF NOT EXISTS employee (
-    id int  NOT NULL,
+    id SERIAL,
     employee_code varchar(32)  NOT NULL,
     first_name varchar(64)  NOT NULL,
     last_name varchar(64)  NOT NULL,

@@ -124,7 +124,7 @@ BEGIN
         ORDER BY RANDOM()
         LIMIT 1;
 
-        SELECT (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
+        SELECT  (CONCAT(food,' ',brand_name)) AS name_concat INTO item_name_random FROM Food, Brand_name
         ORDER BY random()
         LIMIT 1;
 
@@ -142,6 +142,26 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE PROCEDURE insert_Employees(number_of_employees INT)
+AS $$
+DECLARE
+    i INTEGER;
+    name_random TEXT;
+    last_name_random TEXT;
+    employee_code_random TEXT;
+
+BEGIN
+    FOR i IN 1..number_of_employees LOOP
+        SELECT employee_code INTO employee_code_random FROM Employee_code ORDER BY random() LIMIT 1;
+        SELECT first_name, last_name INTO name_random, last_name_random FROM First_name,Last_name ORDER BY random() LIMIT 1;
+        INSERT INTO Employee(employee_code,first_name, last_name) VALUES (employee_code_random,name_random, last_name_random);
+    END LOOP;
+
+    
+END
+$$ LANGUAGE plpgsql;
+ 
 
 CREATE PROCEDURE spCreateTestData (number_of_customers int, number_of_orders int, number_of_items int , avg_items_per_order int)
 AS $$
