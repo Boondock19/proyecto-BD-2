@@ -13,13 +13,13 @@ SELECT * FROM placed_order;
 
 -- Idea para el QUERY 1.
 
--- SELECT DISTINCT c.customer_name, c.city
--- FROM orders o
--- JOIN customers c ON o.customer_id = c.customer_id
+-- SELECT DISTINCT c.first_name, c.city
+-- FROM placed_order o
+-- JOIN customers c.customer_ak_1 ON o. = c.placed_order_customer
 -- JOIN (
 --     SELECT c.city, percentile_disc(0.95) WITHIN GROUP (ORDER BY order_total_price DESC) AS percentile_95
---     FROM orders o
---     JOIN customers c ON o.customer_id = c.customer_id
+--     FROM placed_order o
+--     JOIN customers c ON o.placed_order_customer = c.customer_ak_1
 --     JOIN (
 --         SELECT oi.order_id, SUM(oi.item_quantity * i.price) AS order_total_price
 --         FROM order_items oi
@@ -30,3 +30,15 @@ SELECT * FROM placed_order;
 --     GROUP BY c.city
 -- ) top_5_percent ON c.city = top_5_percent.city AND o.order_total_price >= top_5_percent.percentile_95
 -- ORDER BY c.city;
+
+
+-- -- Idea para el query 3.
+-- SELECT c.first_name, c.last_name, SUM(oi.item_quantity * i.item_price) AS total_gastado
+-- FROM order_items oi
+-- JOIN items i ON oi.order_item_pk = i.item_ak_1
+-- JOIN item_in_box ON ib.item_in_box_pk = i.item_ak_1
+-- JOIN placed_order o ON oi.order_item_pk = o.placed_order_pk
+-- JOIN customers c ON o.placed_order_customer = c.customer_ak_1
+-- GROUP BY c.first_name,c.last_name
+-- ORDER BY total_gastado DESC
+-- LIMIT 10;
